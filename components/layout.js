@@ -20,7 +20,6 @@ export default function Layout({ children, home }) {
     name = "Error do loading data";
   } else {
     if (data) {
-      console.log("data>", data);
       name = data.name;
       picture = data.avatar_url;
     } else {
