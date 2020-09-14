@@ -2,11 +2,32 @@ import Head from "next/head";
 import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
+import useSWR from "swr";
+import fetch from "node-fetch";
 
-const name = "Clairton Luz";
 export const siteTitle = "Next.js Sample Website";
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Layout({ children, home }) {
+  const { data, error } = useSWR(
+    "https://api.github.com/users/clairtonluz",
+    fetcher
+  );
+
+  let name;
+  let picture = "https://enfermeirosmg.org.br/uploads/diretoria/default.png";
+  if (error) {
+    name = "Error do loading data";
+  } else {
+    if (data) {
+      console.log("data>", data);
+      name = data.name;
+      picture = data.avatar_url;
+    } else {
+      name = "loading...";
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -28,7 +49,7 @@ export default function Layout({ children, home }) {
         {home ? (
           <>
             <img
-              src="/images/profile.jpg"
+              src={picture}
               className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
               alt={name}
             />
