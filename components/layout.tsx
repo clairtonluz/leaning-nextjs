@@ -8,7 +8,7 @@ import fetch from "node-fetch";
 export const siteTitle = "Next.js Sample Website";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-export default function Layout({ children, home }) {
+export default ({ children, home = false }) => {
   const { data, error } = useSWR(
     "https://api.github.com/users/clairtonluz",
     fetcher
@@ -83,4 +83,4 @@ export default function Layout({ children, home }) {
       )}
     </div>
   );
-}
+};
